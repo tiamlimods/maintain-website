@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # 主分支名称，根据你的项目修改
+      - main
 
 jobs:
   deploy:
@@ -22,11 +22,11 @@ jobs:
         run: npm install
         
       - name: Build Next.js app
-        run: npm run build
+        run: npm run build  # 这里只会执行 next build
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
-          publish_branch: gh-pages  # 部署到gh-pages分支
+          publish_branch: gh-pages
