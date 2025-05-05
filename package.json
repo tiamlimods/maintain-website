@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "serve": "npx serve out",
     "start": "next start",
     "lint": "next lint"
   },
