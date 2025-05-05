@@ -3,7 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # 保留原有触发规则
+  workflow_dispatch:  # 添加手动触发支持
+    inputs:
+      message:
+        description: '部署说明'
+        required: false
+        default: '手动触发部署'
 
 jobs:
   deploy:
@@ -22,7 +28,7 @@ jobs:
         run: npm install
         
       - name: Build Next.js app
-        run: npm run build  # 这里只会执行 next build
+        run: npm run build
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
