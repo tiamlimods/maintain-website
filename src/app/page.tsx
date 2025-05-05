@@ -2,30 +2,35 @@
 import Image from "next/image";
 import { useState, useEffect } from 'react';
 
+// 新增：计算维护时间的函数
+function calculateMaintenanceDuration(startDateStr: string): string {
+  const startDate = new Date(startDateStr);
+  const now = new Date();
+  const diff = now.getTime() - startDate.getTime();
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  
+  let result = '';
+  if (days > 0) result += `${days}天 `;
+  if (hours > 0 || days > 0) result += `${hours}小时 `;
+  result += `${minutes}分钟 ${seconds}秒`;
+  
+  return result.trim();
+}
+
 export default function Home() {
   const [duration, setDuration] = useState('');
 
   useEffect(() => {
-    const calculateDuration = () => {
-      const startDate = new Date('2025-05-05T11:30:00');
-      const now = new Date();
-      const diff = now.getTime() - startDate.getTime();
-      
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      
-      let result = '';
-      if (days > 0) result += `${days}天 `;
-      if (hours > 0 || days > 0) result += `${hours}小时 `;
-      result += `${minutes}分钟 ${seconds}秒`;
-      
-      setDuration(result.trim());
+    const updateDuration = () => {
+      setDuration(calculateMaintenanceDuration('2025-05-05T11:30:00'));
     };
 
-    calculateDuration();
-    const interval = setInterval(calculateDuration, 1000);
+    updateDuration();
+    const interval = setInterval(updateDuration, 1000);
     
     return () => clearInterval(interval);
   }, []);
