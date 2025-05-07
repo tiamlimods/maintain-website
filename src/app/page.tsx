@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { useState, useEffect } from 'react';
 
-// 新增：计算维护时间的函数
-function calculateMaintenanceDuration(startDateStr: string): string {
+// 计算维护时间的函数
+export function calculateMaintenanceDuration(startDateStr: string): string {
   const startDate = new Date(startDateStr);
   const now = new Date();
   const diff = now.getTime() - startDate.getTime();
@@ -26,13 +26,25 @@ export default function Home() {
 
   useEffect(() => {
     const updateDuration = () => {
-      setDuration(calculateMaintenanceDuration('2025-05-05T11:30:00'));
+      const storedDate = localStorage.getItem('maintenanceStartDate') || '2025-05-05T11:30:00';
+      setDuration(calculateMaintenanceDuration(storedDate));
     };
-
+    
     updateDuration();
     const interval = setInterval(updateDuration, 1000);
     
-    return () => clearInterval(interval);
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'maintenanceStartDate') {
+        updateDuration();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
