@@ -61,7 +61,7 @@ export default function Home() {
                 {duration}
               </div>
               <p className="text-gray-600 dark:text-gray-400">
-                我们会尽快恢复正常服务。
+                我们会尽快恢复正常服务
               </p>
           </div>
         </div>
