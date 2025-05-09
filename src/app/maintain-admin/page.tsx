@@ -10,6 +10,22 @@ export default function AdminPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const authData = localStorage.getItem('authToken');
+    if (!authData) {
+      alert('请先登录！');
+      return;
+    }
+    const { token, timestamp } = JSON.parse(authData);
+    const now = new Date().getTime();
+    if (now - timestamp > 86400000) {
+      localStorage.removeItem('authToken');
+      alert('登录已过期，请重新登录！');
+      return;
+    }
+    if (!token) {
+      alert('请先登录！');
+      return;
+    }
     localStorage.setItem('maintenanceStartDate', newStartDate);
     window.dispatchEvent(new Event('storage'));
     alert('维护时间已更新！');
